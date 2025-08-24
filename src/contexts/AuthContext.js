@@ -22,25 +22,10 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuth = async () => {
     try {
-      // Try to get token from cookies first
       const response = await axios.get('/api/auth/me');
       setUser(response.data.user);
     } catch (error) {
-      // If cookie auth fails, try to get token from localStorage as fallback
-      const token = localStorage.getItem('authToken');
-      if (token) {
-        try {
-          const response = await axios.get('/api/auth/me', {
-            headers: { Authorization: `Bearer ${token}` }
-          });
-          setUser(response.data.user);
-        } catch (tokenError) {
-          localStorage.removeItem('authToken');
-          setUser(null);
-        }
-      } else {
-        setUser(null);
-      }
+      setUser(null);
     } finally {
       setLoading(false);
     }
@@ -54,12 +39,6 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post('/api/auth/login', { email, password });
       setUser(response.data.user);
-      
-      // Store token in localStorage as fallback for cross-origin requests
-      if (response.data.token) {
-        localStorage.setItem('authToken', response.data.token);
-      }
-      
       toast.success('Login successful!');
       return response.data;
     } catch (error) {
