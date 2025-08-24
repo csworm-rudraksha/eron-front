@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
 
   // Configure axios defaults
   axios.defaults.withCredentials = true;
-  axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+  axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'https://eron-back.onrender.com';
 
   const checkAuth = async () => {
     try {
